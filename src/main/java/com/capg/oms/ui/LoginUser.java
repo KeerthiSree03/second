@@ -1,5 +1,6 @@
 package com.capg.oms.ui;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.capg.oms.model.User;
@@ -20,20 +21,16 @@ public class LoginUser {
 		System.out.println("Enter the userId:");
 		long id=sc.nextLong();
 		service.initialCustomerList();
-		if(service.getCustomer().containsKey(id))
+		if(!service.getCustomer().containsKey(id))
 		{
-			System.out.println("Exsisted id");
-			login();
-		}
-		
    		try {
 			if(service.validateCustomerId(id)) {
 				user.setUserId(id);
 			}
 		System.out.println("Enter the password: ");
-		String pw=sc.next()+sc.nextLine();
-		if(service.validatePassword(pw)) {
-			user.setUserPassword(pw);
+		String password=sc.next()+sc.nextLine();
+		if(service.validatePassword(password)) {
+			user.setUserPassword(password);
 		}
 
 		System.out.println("Enter the Name: ");
@@ -41,9 +38,9 @@ public class LoginUser {
 		user.setUserName(name);
 		
 		System.out.println("Enter the phone: ");
-		long ph=sc.nextLong();
-		if(service.validatePhoneNo(ph)) {
-			user.setUserPhone(ph);
+		long phone=sc.nextLong();
+		if(service.validatePhoneNo(phone)) {
+			user.setUserPhone(phone);
 		}
 		
 		System.out.println("Enter the email: ");
@@ -52,58 +49,69 @@ public class LoginUser {
 			user.setUserEmail(mail);
 		}
 		
-		
+   		
 		if(service.addUser(user)) {
 			System.out.println("Account created Successfully!!!.....you can login into your account now");
 			login();
 		}
-		else {
-			System.out.println("User id already exists....");
-			login();
-		}
 		}
 		catch (InvalidDetailsException e1) {
-			System.out.println(e1.getMessage());
+			System.out.println(e1.getMessage()+"Please try again...");
+			login();
+		}
+   		}
+   		else {
+			System.out.println("User id already exists....Please try again");
+			login();
+			
 		}
 		
 	}
 
 	public static void customerLogin() {
 		service.initialCustomerList();
+		service.addUser(user);
+		try {
 		System.out.println("Enter the userId: ");
-		long cId = sc.nextLong();
-		String cPw=null ;
-		if(service.getCustomer().containsKey(cId)) {
+		long customerId = sc.nextLong();
+		String customerPassword=null ;
+		if(service.getCustomer().containsKey(customerId)) {
 			System.out.println("Enter the password: ");
-			cPw = sc.next()+sc.nextLine();
-			String p=service.viewCustomer(cId).getUserPassword();
-			if(p.equals(cPw)) {
+			customerPassword = sc.next()+sc.nextLine();
+			String password=service.viewCustomer(customerId).getUserPassword();
+			if(password.equals(customerPassword)) {
 				System.out.println("Login Successful");
+				customerPage();
 			}
 			else {
 					System.out.println("Invalid password!!!.....try again");
 					System.out.println("If new user then create a new account...");
-					login();
+					
 			}
 		}
 		else {
 			System.out.println("Invalid Id");
 			System.out.println("If new user then create a new account...");
-			login();
+			
 		}		
+		}catch(InputMismatchException err) {
+			System.out.println("Please enter valid type...");
+		}
 	}
 	
 	public static void adminLogin() {
 		service.initialAdminList();
+		try {
 		System.out.println("Enter the userId: ");
-		long aId = sc.nextLong();
-		String aPw=null ;
-		if(service.getAdmin().containsKey(aId)) {
+		long adminId = sc.nextLong();
+		String adminPassword=null ;
+		if(service.getAdmin().containsKey(adminId)) {
 			System.out.println("Enter the password: ");
-			aPw = sc.next()+sc.nextLine();
-			String p=service.viewAdmin(aId).getUserPassword();
-			if(p.equals(aPw)) {
+			adminPassword = sc.next()+sc.nextLine();
+			String p=service.viewAdmin(adminId).getUserPassword();
+			if(p.equals(adminPassword)) {
 				System.out.println("Login Successful");
+				adminPage();
 			}
 			else {
 					System.out.println("Invalid password!!!......try again");
@@ -111,18 +119,25 @@ public class LoginUser {
 			}
 		}
 		else {
-			System.out.println("Invalid id");
+			System.out.println("Invalid id....please try again");
 			login();
+		
+		}
+		}catch(InputMismatchException err) {
+			System.out.println("Please enter valid type...");
 		}
 	}
 	
 	public static void login() {
+		int choice=0;
 		
 		System.out.println("Choose the type of user : ");
 		System.out.println("1 - Admin");
 		System.out.println("2 - Customer");
 		System.out.println("3 - New User");
-		int choice=sc.nextInt();
+		System.out.println("4 - Exit");
+		try {
+		choice=sc.nextInt();
 		switch(choice) {
 			case 1:
 				adminLogin();
@@ -136,8 +151,78 @@ public class LoginUser {
 				newUser();
 				break;
 				
+			case 4:
+				System.exit(0);
+				break;
+				
 			default:
-				System.out.println("Invalid choice");
+				System.out.println("Invalid choice....please try again");
+				login();
+				break;
 		}
+		}
+		catch(InputMismatchException err) {
+			System.out.println("Please choose valid option...");
+		}
+		
+	}
+	
+	public static void adminPage() {
+		System.out.println("Choose an option");
+		System.out.println("1 - View Cities list");
+		System.out.println("2 - Add Cities into list");
+		System.out.println("3 - Remove city from list");
+		System.out.println("4 - View Movies list");
+		System.out.println("5 - Add Movie into list");
+		System.out.println("6 - Remove movie from list");
+		int choice=sc.nextInt();
+		switch(choice) {
+			case 1:	service.viewCitiesToBookTicket();
+					break;
+					
+			case 2: System.out.println("Enter the city name to be added:");
+					String cityName=sc.next()+sc.nextLine();
+					service.addCityIntoListOfCities(cityName);
+					break;
+			
+			case 3: System.out.println("Enter the city name to be removed:");
+					String cityNameToRemove=sc.next()+sc.nextLine();
+					service.removeCityFromListOfCities(cityNameToRemove);
+					break;
+					
+			case 4:	service.viewMoviesToBookTicket();
+					break;	
+					
+			case 5: System.out.println("Enter the movie name to be added:");
+					String movieName=sc.next()+sc.nextLine();
+					service.addMovieIntoListOfMovies(movieName);
+					break;	
+			
+			case 6: System.out.println("Enter the movie name to be removed:");
+					String movieNameToRemove=sc.next()+sc.nextLine();
+					service.removeMovieFromListOfMovies(movieNameToRemove);
+					break;
+					
+			default: System.out.println("Invalid Input");
+					break;
+						
+			
+		}
+	}
+	
+	public static void customerPage() {
+		System.out.println("Choose an option");
+		System.out.println("1 - View Cities list");
+		System.out.println("2 - View Movies list");
+		int choice=sc.nextInt();
+		switch(choice) {
+			case 1:	service.viewCitiesToBookTicket();
+					break;
+			case 2:	service.viewMoviesToBookTicket();
+					break;
+			default: System.out.println("Invalid Input");
+					break;
+		}
+		
 	}
 }

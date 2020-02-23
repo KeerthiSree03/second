@@ -14,6 +14,15 @@ public interface UserService {
 	public Map<Long,User> getCustomer();
 	public User viewCustomer(long userId);
 	public User viewAdmin(long userId);
+	
+	public void viewCitiesToBookTicket();
+	public void addCityIntoListOfCities(String city);
+	public void removeCityFromListOfCities(String movie);
+	public void viewMoviesToBookTicket();
+	public void addMovieIntoListOfMovies(String movie);
+	public void removeMovieFromListOfMovies(String movie);
+
+	
 	public boolean validatePhoneNo(long phoneNo) throws InvalidDetailsException;
 	public boolean validateEmail(String mail) throws InvalidDetailsException;
 	public boolean validateCustomerId(long id) throws InvalidDetailsException;

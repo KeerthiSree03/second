@@ -14,5 +14,7 @@ public interface UserDao {
 	public User viewCustomer(long userId);
 	public void addSomeAdmins();
 	public void addSomeCustomers();
-
+	public List<String> listOfMovies();
+	public List<String> listOfCities();
+		
 }

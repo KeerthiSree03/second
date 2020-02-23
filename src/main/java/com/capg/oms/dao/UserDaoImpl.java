@@ -2,6 +2,7 @@ package com.capg.oms.dao;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,14 @@ public User viewCustomer(long userId) {
 		return null;
 	}
 
+public List<String> listOfMovies() {
+	List<String> movies=Arrays.asList("Bahubali","Bahubain 2","Bheeshma","Ala vaikintapuramlo");
+	return movies;
+}
 
-
+public List<String> listOfCities() {
+	List<String> cities=Arrays.asList("Hyderabad","Secunderabad","Banglore","Chennai");
+	return cities;
+}
 	
 }

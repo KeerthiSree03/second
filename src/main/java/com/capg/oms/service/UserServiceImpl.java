@@ -10,36 +10,36 @@ import com.capg.oms.ui.LoginUser;
 
 public class UserServiceImpl implements UserService {
 	
-	static UserDao d=new UserDaoImpl();
+	static UserDao dao=new UserDaoImpl();
 	
 	public boolean addUser(User user) {
-		return d.addUser(user); 
+		return dao.addUser(user); 
 	}
 
 	
 
 	public Map<Long, User> getCustomer() {
-		return d.getCustomer();	
+		return dao.getCustomer();	
 	}
 	
 	public Map<Long, User> getAdmin() {
-		return d.getAdmin();	
+		return dao.getAdmin();	
 	}
 
 	public User viewAdmin(long userId) {
-		return d.viewAdmin(userId);	
+		return dao.viewAdmin(userId);	
 	}
 	
 	public User viewCustomer(long userId) {
-		return d.viewCustomer(userId);	
+		return dao.viewCustomer(userId);	
 	}
 
 	public void initialAdminList() {
-		d.addSomeAdmins();
+		dao.addSomeAdmins();
 	}
 	
 	public void initialCustomerList() {
-		d.addSomeCustomers();
+		dao.addSomeCustomers();
 	}
 	
 	public boolean validatePhoneNo(long phoneNo) throws InvalidDetailsException {
@@ -79,6 +79,47 @@ public class UserServiceImpl implements UserService {
 		else {
 			throw new InvalidDetailsException("Password should be of minimun 8 characters");
 		}
+	}
+
+
+
+	public void viewCitiesToBookTicket() {
+		dao.listOfCities();	
+	}
+
+
+
+	public void addCityIntoListOfCities(String city) {
+		dao.listOfCities().add(city);
+		
+	}
+
+
+
+	public void removeCityFromListOfCities(String movie) {
+		dao.listOfCities().remove(movie);
+		
+	}
+
+
+
+	public void viewMoviesToBookTicket() {
+		dao.listOfMovies();
+		
+	}
+
+
+
+	public void addMovieIntoListOfMovies(String movie) {
+		dao.listOfMovies().add(movie);
+		
+	}
+
+
+
+	public void removeMovieFromListOfMovies(String movie) {
+		dao.listOfMovies().remove(movie);
+		
 	}
 
 }
